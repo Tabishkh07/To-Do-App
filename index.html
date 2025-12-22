@@ -1,11 +1,270 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ToDo App</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Planno</title>
+
+  <!-- Icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+
+  <!-- CSS (empty for Day 1) -->
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    
+
+  <!-- APP CONTAINER -->
+  <div class="container">
+
+    <!-- HEADER -->
+    <header class="header">
+      <div class="logo">
+        <i class="fa-brands fa-studiovinari"></i>
+        <h1>Planno</h1>
+      </div>
+
+      <button class="theme-toggle">
+        <i class="fa-regular fa-moon"></i>
+      </button>
+    </header>
+
+    <!-- DASHBOARD STATS -->
+    <section class="stats-section">
+
+      <div class="stat">
+        <div class="stat-icon">
+          <i class="fa-regular fa-bookmark"></i>
+        </div>
+        <div class="stat-number">6</div>
+        <p class="stat-label">Total Tasks</p>
+      </div>
+
+      <div class="stat">
+        <div class="stat-icon">
+          <i class="fa-regular fa-user-clock"></i>
+        </div>
+        <div class="stat-number">4</div>
+        <p class="stat-label">Pending</p>
+      </div>
+
+      <div class="stat">
+        <div class="stat-icon">
+          <i class="fa-regular fa-calendar-check"></i>
+        </div>
+        <div class="stat-number">2</div>
+        <p class="stat-label">Completed</p>
+      </div>
+
+      <div class="stat">
+        <div class="stat-icon">
+          <i class="fa-solid fa-chart-line"></i>
+        </div>
+        <div class="stat-number">33%</div>
+        <p class="stat-label">Productivity</p>
+      </div>
+
+    </section>
+
+    <!-- PROGRESS BAR -->
+    <section class="progress-section">
+      <div class="progress-text">
+        <span>Overall Progress</span>
+        <span>2 / 6 tasks completed</span>
+      </div>
+
+      <div class="progress-bar">
+        <div class="progress-fill"></div>
+      </div>
+    </section>
+
+    <!-- DAILY FOCUS -->
+    <section class="daily-focus">
+
+      <div class="section-header">
+        <h2>Today's Focus</h2>
+        <p>Top 3 priority tasks for today</p>
+      </div>
+
+      <div class="focus-tasks">
+
+        <div class="focus-task">
+          <h3 class="task-title">Complete project proposal</h3>
+          <span class="priority high">High</span>
+          <p class="description">
+            Finalize the Q1 project proposal and send it to the team.
+          </p>
+          <span class="category">Work</span>
+        </div>
+
+        <div class="focus-task">
+          <h3 class="task-title">Study JavaScript</h3>
+          <span class="priority medium">Medium</span>
+          <p class="description">
+            Revise DOM manipulation and event handling.
+          </p>
+          <span class="category">Study</span>
+        </div>
+
+        <div class="focus-task">
+          <h3 class="task-title">Morning workout</h3>
+          <span class="priority low">Low</span>
+          <p class="description">
+            30 minutes cardio and stretching.
+          </p>
+          <span class="category">Health</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ALL TASKS -->
+    <section class="all-tasks">
+
+      <div class="section-header">
+        <h2>All Tasks</h2>
+      </div>
+
+      <!-- CONTROLS -->
+      <div class="controls">
+        <input type="text" placeholder="Search tasks..." class="search" />
+
+        <select class="filter category">
+          <option>All Categories</option>
+          <option>Work</option>
+          <option>Study</option>
+          <option>Personal</option>
+        </select>
+
+        <select class="filter status">
+          <option>All Status</option>
+          <option>Pending</option>
+          <option>Completed</option>
+        </select>
+
+        <select class="filter sort">
+          <option>Sort by Date</option>
+          <option>Sort by Priority</option>
+        </select>
+      </div>
+
+      <!-- TASK LIST -->
+      <div class="tasks-list">
+
+        <div class="task-card">
+          <div class="task-checkbox"></div>
+
+          <div class="task-content">
+            <h3 class="task-title">Buy groceries</h3>
+            <p class="task-description">Milk, fruits, vegetables</p>
+
+            <div class="task-meta">
+              <span class="category">Personal</span>
+              <span class="priority medium">Medium</span>
+              <span class="due-date">Today</span>
+            </div>
+          </div>
+
+          <div class="task-actions">
+            <button class="edit"><i class="fa-solid fa-pen"></i></button>
+            <button class="delete"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </div>
+
+        <div class="task-card">
+          <div class="task-checkbox"></div>
+
+          <div class="task-content">
+            <h3 class="task-title">Finish assignment</h3>
+            <p class="task-description">Submit before midnight</p>
+
+            <div class="task-meta">
+              <span class="category">Study</span>
+              <span class="priority high">High</span>
+              <span class="due-date">Tomorrow</span>
+            </div>
+          </div>
+
+          <div class="task-actions">
+            <button class="edit"><i class="fa-solid fa-pen"></i></button>
+            <button class="delete"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- FLOATING ADD BUTTON -->
+    <button class="fab">
+      <i class="fa-solid fa-plus"></i>
+    </button>
+
+    <!-- MODAL -->
+    <div class="modal">
+
+      <div class="modal-overlay"></div>
+
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h2>Create Task</h2>
+          <button class="close">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <form class="task-form">
+
+          <div class="form-group">
+            <label>Title</label>
+            <input type="text" />
+          </div>
+
+          <div class="form-group">
+            <label>Description</label>
+            <textarea></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Category</label>
+              <select>
+                <option>Work</option>
+                <option>Study</option>
+                <option>Personal</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Priority</label>
+              <select>
+                <option>Low</option>
+                <option>Medium</option>
+                <option>High</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Due Date</label>
+            <input type="date" />
+          </div>
+
+          <div class="modal-actions">
+            <button type="button">Cancel</button>
+            <button type="submit">Create</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- JS (empty for Day 1) -->
+  <script src="script.js"></script>
+
 </body>
 </html>
