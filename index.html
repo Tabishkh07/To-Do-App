@@ -156,7 +156,7 @@
         <div class="task-card">
           <div class="task-checkbox"></div>
 
-          <div class="task-content">
+          <!-- <div class="task-content">
             <h3 class="task-title">Buy groceries</h3>
             <p class="task-description">Milk, fruits, vegetables</p>
 
@@ -165,18 +165,18 @@
               <span class="priority medium">Medium</span>
               <span class="due-date">Today</span>
             </div>
-          </div>
+          </div> -->
 
-          <div class="task-actions">
+          <!-- <div class="task-actions">
             <button class="edit"><i class="fa-solid fa-pen"></i></button>
             <button class="delete"><i class="fa-solid fa-trash"></i></button>
           </div>
         </div>
 
         <div class="task-card">
-          <div class="task-checkbox"></div>
+          <div class="task-checkbox"></div> -->
 
-          <div class="task-content">
+          <!-- <div class="task-content">
             <h3 class="task-title">Finish assignment</h3>
             <p class="task-description">Submit before midnight</p>
 
@@ -185,13 +185,13 @@
               <span class="priority high">High</span>
               <span class="due-date">Tomorrow</span>
             </div>
-          </div>
+          </div> -->
 
-          <div class="task-actions">
+          <!-- <div class="task-actions">
             <button class="edit"><i class="fa-solid fa-pen"></i></button>
             <button class="delete"><i class="fa-solid fa-trash"></i></button>
           </div>
-        </div>
+        </div> -->
 
       </div>
     </section>
@@ -219,18 +219,18 @@
 
           <div class="form-group">
             <label>Title</label>
-            <input type="text" />
+            <input type="text" name="title"/>
           </div>
 
           <div class="form-group">
             <label>Description</label>
-            <textarea></textarea>
+            <textarea name="description"></textarea>
           </div>
 
           <div class="form-row">
             <div class="form-group">
               <label>Category</label>
-              <select>
+              <select name="category">
                 <option>Work</option>
                 <option>Study</option>
                 <option>Personal</option>
@@ -239,7 +239,7 @@
 
             <div class="form-group">
               <label>Priority</label>
-              <select>
+              <select name="priority">
                 <option>Low</option>
                 <option>Medium</option>
                 <option>High</option>
@@ -249,12 +249,12 @@
 
           <div class="form-group">
             <label>Due Date</label>
-            <input type="date" />
+            <input type="date" name="dueDate"/>
           </div>
 
           <div class="modal-actions">
-            <button type="button">Cancel</button>
-            <button type="submit">Create</button>
+            <button type="button" class="cancel">Cancel</button>
+            <button type="submit" class="create">Create</button>
           </div>
 
         </form>
@@ -262,6 +262,33 @@
     </div>
 
   </div>
+
+  <template id="task-template">
+  <div class="task-card">
+    <div class="task-checkbox"></div>
+
+    <div class="task-content">
+      <h3 class="task-title"></h3>
+      <p class="task-description"></p>
+
+      <div class="task-meta">
+        <span class="task-category"></span>
+        <span class="task-priority"></span>
+        <span class="task-date"></span>
+      </div>
+    </div>
+
+    <div class="task-actions">
+      <button class="edit-btn">
+        <i class="fa-solid fa-pen"></i>
+      </button>
+      <button class="delete-btn">
+        <i class="fa-solid fa-trash"></i>
+      </button>
+    </div>
+  </div>
+</template>
+
 
   <!-- JS (empty for Day 1) -->
   <script src="script.js"></script>
