@@ -47,8 +47,11 @@ function saveTasks() {
 form.addEventListener("submit", (e) => {
   e.preventDefault();
 
+  const title = form.title.value.trim();
+  if (!title) return;
+
   const data = {
-    title: form.title.value.trim(),
+    title,
     description: form.description.value.trim(),
     category: form.category.value,
     priority: form.priority.value,
@@ -58,6 +61,7 @@ form.addEventListener("submit", (e) => {
   if (editId) {
     const task = tasks.find(t => t.id === editId);
     Object.assign(task, data);
+    editId = null;
   } else {
     tasks.unshift({
       id: Date.now(),
@@ -72,7 +76,7 @@ form.addEventListener("submit", (e) => {
 });
 
 /* =====================
-   RENDER TASKS (UI SAFE)
+   RENDER TASKS
 ===================== */
 function renderTasks() {
   tasksList.innerHTML = "";
@@ -89,17 +93,31 @@ function renderTasks() {
   tasks.forEach(task => {
     const node = template.content.cloneNode(true);
     const card = node.querySelector(".task-card");
+    const checkbox = node.querySelector(".task-checkbox");
 
-    if (task.completed) card.classList.add("completed");
+    /* COMPLETED STATE */
+    if (task.completed) {
+      card.classList.add("completed");
+      checkbox.classList.add("checked");
+    }
 
+    /* CONTENT */
     node.querySelector(".task-title").textContent = task.title;
     node.querySelector(".task-description").textContent = task.description;
     node.querySelector(".task-category").textContent = task.category;
-    node.querySelector(".task-priority").textContent = task.priority;
-    node.querySelector(".task-date").textContent = task.dueDate;
+
+    const priorityEl = node.querySelector(".task-priority");
+    priorityEl.textContent = task.priority;
+    priorityEl.classList.add(
+      "priority",
+      task.priority.toLowerCase()
+    );
+
+    node.querySelector(".task-date").textContent =
+      task.dueDate || "";
 
     /* CHECKBOX */
-    node.querySelector(".task-checkbox").addEventListener("click", () => {
+    checkbox.addEventListener("click", () => {
       task.completed = !task.completed;
       saveTasks();
       renderTasks();
@@ -131,4 +149,3 @@ function renderTasks() {
    INIT
 ===================== */
 renderTasks();
-
