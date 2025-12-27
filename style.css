@@ -473,3 +473,36 @@ header button:hover {
   font-size: 12px;
 }
 
+body.dark {
+  background: #0f172a;
+  color: #e5e7eb;
+}
+
+body.dark .stat,
+body.dark .focus-task,
+body.dark .task-card,
+body.dark .progress-section,
+body.dark .modal-content {
+  background: #1e293b;
+  color: #e5e7eb;
+}
+
+body.dark .controls input,
+body.dark .controls select,
+body.dark .task-form input,
+body.dark .task-form textarea,
+body.dark .task-form select {
+  background: #020617;
+  color: #e5e7eb;
+  border-color: #334155;
+}
+
+body.dark .task-date,
+body.dark .stat-label,
+body.dark .section-header p {
+  color: #94a3b8;
+}
+
+body.dark .modal {
+  background: rgba(15, 23, 42, 0.8);
+}
