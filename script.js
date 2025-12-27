@@ -11,6 +11,41 @@ const form = document.querySelector(".task-form");
 const tasksList = document.querySelector(".tasks-list");
 const template = document.querySelector("#task-template");
 
+const searchInput = document.querySelector(".search");
+const categoryFilter = document.querySelector(".filter.category");
+const statusFilter = document.querySelector(".filter.status");
+const sortFilter = document.querySelector(".filter.sort");
+
+/* Dashboard */
+const totalEl = document.querySelectorAll(".stat-number")[0];
+const pendingEl = document.querySelectorAll(".stat-number")[1];
+const completedEl = document.querySelectorAll(".stat-number")[2];
+const productivityEl = document.querySelectorAll(".stat-number")[3];
+const progressFill = document.querySelector(".progress-fill");
+const progressText = document.querySelector(".progress-text span:last-child");
+
+const focusContainer = document.querySelector(".focus-tasks");
+const themeToggle = document.querySelector(".theme-toggle");
+const themeIcon = themeToggle.querySelector("i");
+
+function setTheme(theme) {
+  if (theme === "dark") {
+    document.body.classList.add("dark");
+    themeIcon.className = "fa-regular fa-sun";
+  } else {
+    document.body.classList.remove("dark");
+    themeIcon.className = "fa-regular fa-moon";
+  }
+  localStorage.setItem("theme", theme);
+}
+themeToggle.addEventListener("click", () => {
+  const isDark = document.body.classList.contains("dark");
+  setTheme(isDark ? "light" : "dark");
+});
+const savedTheme = localStorage.getItem("theme") || "light";
+setTheme(savedTheme);
+
+
 /* =====================
    STATE
 ===================== */
@@ -55,7 +90,7 @@ form.addEventListener("submit", (e) => {
     description: form.description.value.trim(),
     category: form.category.value,
     priority: form.priority.value,
-    dueDate: form.dueDate.value
+    dueDate: form.dueDate.value,
   };
 
   if (editId) {
@@ -66,71 +101,101 @@ form.addEventListener("submit", (e) => {
     tasks.unshift({
       id: Date.now(),
       completed: false,
+      createdAt: Date.now(),
       ...data
     });
   }
 
   saveTasks();
-  renderTasks();
+  render();
   closeModal();
 });
 
 /* =====================
-   RENDER TASKS
+   CORE RENDER
 ===================== */
-function renderTasks() {
+function render() {
+  let filtered = [...tasks];
+
+  /* SEARCH */
+  const search = searchInput.value.toLowerCase();
+  if (search) {
+    filtered = filtered.filter(t =>
+      t.title.toLowerCase().includes(search) ||
+      t.description.toLowerCase().includes(search)
+    );
+  }
+
+  /* CATEGORY FILTER */
+  if (categoryFilter.value !== "All Categories") {
+    filtered = filtered.filter(t => t.category === categoryFilter.value);
+  }
+
+  /* STATUS FILTER */
+  if (statusFilter.value === "Pending") {
+    filtered = filtered.filter(t => !t.completed);
+  }
+  if (statusFilter.value === "Completed") {
+    filtered = filtered.filter(t => t.completed);
+  }
+
+  /* SORT */
+  if (sortFilter.value === "Sort by Date") {
+    filtered.sort((a, b) => new Date(a.dueDate || 0) - new Date(b.dueDate || 0));
+  }
+  if (sortFilter.value === "Sort by Priority") {
+    const order = { High: 1, Medium: 2, Low: 3 };
+    filtered.sort((a, b) => order[a.priority] - order[b.priority]);
+  }
+
+  renderTasks(filtered);
+  updateDashboard();
+  updateFocus();
+}
+
+/* =====================
+   TASK LIST
+===================== */
+function renderTasks(list) {
   tasksList.innerHTML = "";
 
-  if (tasks.length === 0) {
-    tasksList.innerHTML = `
-      <p class="empty-text">
-        No tasks yet. Click <strong>+</strong> to add one.
-      </p>
-    `;
+  if (list.length === 0) {
+    tasksList.innerHTML = `<p class="empty-text">No tasks found.</p>`;
     return;
   }
 
-  tasks.forEach(task => {
+  list.forEach(task => {
     const node = template.content.cloneNode(true);
     const card = node.querySelector(".task-card");
     const checkbox = node.querySelector(".task-checkbox");
 
-    /* COMPLETED STATE */
     if (task.completed) {
       card.classList.add("completed");
       checkbox.classList.add("checked");
     }
 
-    /* CONTENT */
     node.querySelector(".task-title").textContent = task.title;
     node.querySelector(".task-description").textContent = task.description;
     node.querySelector(".task-category").textContent = task.category;
 
     const priorityEl = node.querySelector(".task-priority");
     priorityEl.textContent = task.priority;
-    priorityEl.classList.add(
-      "priority",
-      task.priority.toLowerCase()
-    );
+    priorityEl.classList.add(task.priority.toLowerCase());
 
-    node.querySelector(".task-date").textContent =
-      task.dueDate || "";
+    node.querySelector(".task-date").textContent = task.dueDate || "";
 
-    /* CHECKBOX */
     checkbox.addEventListener("click", () => {
       task.completed = !task.completed;
       saveTasks();
-      renderTasks();
+      render();
     });
 
-    /* DELETE */
     node.querySelector(".delete-btn").addEventListener("click", () => {
       tasks = tasks.filter(t => t.id !== task.id);
       saveTasks();
-      renderTasks();
+      render();
     });
 
-    /* EDIT */
     node.querySelector(".edit-btn").addEventListener("click", () => {
       editId = task.id;
       form.title.value = task.title;
@@ -146,6 +211,59 @@ function renderTasks() {
 }
 
 /* =====================
+   DASHBOARD
+===================== */
+function updateDashboard() {
+  const total = tasks.length;
+  const completed = tasks.filter(t => t.completed).length;
+  const pending = total - completed;
+  const percent = total ? Math.round((completed / total) * 100) : 0;
+
+  totalEl.textContent = total;
+  completedEl.textContent = completed;
+  pendingEl.textContent = pending;
+  productivityEl.textContent = `${percent}%`;
+
+  progressFill.style.width = `${percent}%`;
+  progressText.textContent = `${completed} / ${total} tasks completed`;
+}
+
+/* =====================
+   TODAY'S FOCUS
+===================== */
+function updateFocus() {
+  focusContainer.innerHTML = "";
+
+  const focusTasks = tasks
+    .filter(t => !t.completed)
+    .sort((a, b) => {
+      const p = { High: 1, Medium: 2, Low: 3 };
+      return p[a.priority] - p[b.priority];
+    })
+    .slice(0, 3);
+
+  focusTasks.forEach(task => {
+    const div = document.createElement("div");
+    div.className = "focus-task";
+    div.innerHTML = `
+      <h3 class="task-title">${task.title}</h3>
+      <span class="priority ${task.priority.toLowerCase()}">${task.priority}</span>
+      <p class="description">${task.description}</p>
+      <span class="category">${task.category}</span>
+    `;
+    focusContainer.appendChild(div);
+  });
+}
+
+/* =====================
+   EVENTS
+===================== */
+searchInput.addEventListener("input", render);
+categoryFilter.addEventListener("change", render);
+statusFilter.addEventListener("change", render);
+sortFilter.addEventListener("change", render);
+
+/* =====================
    INIT
 ===================== */
-renderTasks();
+render();
