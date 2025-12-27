@@ -53,7 +53,9 @@ Planno helps users organize their daily tasks efficiently with features like tas
 ---
 
 ## 📸 Screenshots
-![Uploading Screenshot 2025-12-27 at 11.14.23 PM.png…]()
+
+<img width="1438" height="819" alt="Screenshot 2025-12-27 at 11 16 40 PM" src="https://github.com/user-attachments/assets/9d51f8f3-a883-4a1c-90cb-a4d2ba16ac7c" />
+
 
 
 ---
